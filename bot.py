@@ -1,10 +1,12 @@
 from telethon import TelegramClient, events
 import asyncio
 import re
+import os
 
 # تنظیمات API تلگرام
 API_ID = '23717113'
 API_HASH = '208e450010e2002794c24cfab85590c0'
+PHONE = os.getenv('PHONE_NUMBER', '')  # شماره موبایل از متغیرهای محیطی
 
 # آیدی عددی کانال‌ها
 SOURCE_CHANNELS = [-1001567904175]
@@ -27,9 +29,12 @@ def process_text(text):
 
 async def main():
     try:
+        # استفاده از StringSession برای ذخیره session
         client = TelegramClient('bot_session', API_ID, API_HASH)
         print("در حال اتصال به تلگرام...")
-        await client.start()
+        
+        # اتصال با شماره موبایل از پیش تعیین شده
+        await client.start(phone=PHONE)
         print("اتصال برقرار شد!")
 
         @client.on(events.NewMessage(chats=SOURCE_CHANNELS))
